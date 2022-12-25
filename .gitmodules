@@ -1,0 +1,14 @@
+[submodule "TexWriter/vendor/spdlog"]
+	path = TexWriter/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
+	branch = v1.x
+[submodule "TexWriter/vendor/GLFW"]
+	path = TexWriter/vendor/GLFW
+	url = https://github.com/pacojq/glfw.git
+[submodule "TexWriter/vendor/imgui"]
+	path = TexWriter/vendor/imgui
+	url = https://github.com/ocornut/imgui.git
+	branch = docking
+[submodule "TexWriter/vendor/glm"]
+	path = TexWriter/vendor/glm
+	url = https://github.com/pacojq/glm.git
