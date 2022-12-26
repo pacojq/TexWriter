@@ -10,7 +10,7 @@
 #include "Events/MouseEvent.h"
 #include "Events/ApplicationEvent.h"
 
-#include "Panels/LanguageListPanel.h"
+#include "EditorMenuBar.h"
 
 #include "Windows/DashboardWindow.h"
 #include "Windows/PreviewWindow.h"
@@ -51,11 +51,11 @@ namespace TexWriter {
 
 
 	private:
+		Ref<EditorMenuBar> m_MenuBar;
+		friend class EditorMenuBar;
+
 		bool m_ContentActive = false;
 		Ref<TWriterProject> m_Content;
-		
-		Ref<LanguageListPanel> m_LanguageListWindow;
-		bool m_ShowLanguageListWindow = false;
 
 		Ref<DashboardWindow> m_DashboardWindow;
 		bool m_ShowDashboardWindow = false;

@@ -37,7 +37,7 @@ The features that TexWriter provides, ordered by implementation priority, list a
 
 - [x] Fragment shader editor
 - [x] Shader compiler
-- [ ] Export image asset
+- [x] Export image asset
 - [ ] Editor feedback on shader compile errors
 - [ ] Include input image files
 - [ ] Define custom uniform variables

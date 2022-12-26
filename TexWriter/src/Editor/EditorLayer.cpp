@@ -15,7 +15,8 @@ namespace TexWriter {
 
 	EditorLayer::EditorLayer() : Layer("Editor Layer")
 	{
-		m_LanguageListWindow = CreateRef<LanguageListPanel>(this);
+		m_MenuBar = CreateRef<EditorMenuBar>(this);
+
 		m_DashboardWindow = CreateRef<DashboardWindow>(this);
 		m_PreviewWindow = CreateRef<PreviewWindow>(this);
 		m_TextEditorWindow = CreateRef<TextEditorWindow>(this);
@@ -29,6 +30,7 @@ namespace TexWriter {
 	void EditorLayer::OnAttach()
 	{
 		m_Content = CreateRef<TWriterProject>("Blank Project", "");
+		m_ContentActive = true;
 
 		// TODO: update data in each window
 
@@ -99,127 +101,9 @@ namespace TexWriter {
 				ResetDockSpace();
 		}
 
-
-
-		// ============================================= MENU BAR ============================================= //
-
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
-			{
-				if (ImGui::MenuItem("New File..."))
-				{
-					std::string filename = FilesUtil::SaveFile("MBS Localization\0*.mbsloc\0 All files\0*.*\0");
-					if (filename != "")
-					{
-						if (filename.substr(filename.find_last_of(".") + 1) != "mbsloc")
-							filename = filename + ".mbsloc";
-						
-						std::string name = FilesUtil::SplitFileName(filename);
-						m_Content = CreateRef<TWriterProject>(name, filename);
-						m_ContentActive = true;
-						ContentSerializer::Serialize(m_Content, filename);
-						ResetLayout();
-					}
-				}
-				if (ImGui::MenuItem("Open File..."))
-				{
-					std::string filename = FilesUtil::OpenFile("MBS Localization\0*.mbsloc\0 All files\0*.*\0");
-					if (filename != "")
-					{
-						if (filename.substr(filename.find_last_of(".") + 1) == "mbsloc")
-						{
-							if (m_Content)
-								m_Content.reset();
-							m_Content = ContentSerializer::Deserialize(filename);
-							m_ContentActive = true;
-							ResetLayout();
-						}
-						else
-						{
-							TW_LOG_ERROR("Please, select a .mbsloc file");
-						}
-					}
-				}
-
-				ImGui::Separator();
-
-				if (ImGuiUtil::MenuItem("Save", m_ContentActive))
-				{
-					ContentSerializer::Serialize(m_Content, m_Content->GetPath());
-				}
-				if (ImGuiUtil::MenuItem("Save as...", m_ContentActive))
-				{
-					std::string filename = FilesUtil::SaveFile("MBS Localization\0*.mbsloc");
-					if (filename != "")
-					{
-						ContentSerializer::Serialize(m_Content, filename);
-					}
-				}
-
-				ImGui::Separator();
-
-				if (ImGui::MenuItem("Exit"))
-				{
-					TexWriter::Application::Get().Close();
-				}
-				
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Window"))
-			{
-				if (ImGuiUtil::MenuItem("Language List", m_ContentActive))
-				{
-					m_ShowLanguageListWindow = true;
-				}
-				if (ImGuiUtil::MenuItem("Dashboard", m_ContentActive))
-				{
-					m_ShowDashboardWindow = true;
-				}
-
-				ImGui::Separator();
-
-				if (ImGuiUtil::MenuItem("Search", m_ContentActive))
-				{
-					// TODO
-				}
-
-				ImGui::Separator();
-
-				if (ImGuiUtil::MenuItem("Stats", m_ContentActive))
-				{
-					// TODO
-				}
-				if (ImGui::MenuItem("Console"))
-				{
-					Application::Get().GetImGuiLayer()->ShowConsole();
-				}
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Help"))
-			{
-				if (ImGui::MenuItem("About"))
-				{
-					m_ShowAboutWindow = true;
-				}
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMenuBar();
-		}
-
-
-
-
+		m_MenuBar->OnImGuiRender();
 
 		// ============================================= WINDOWS ============================================= //
-
-		if (m_ShowLanguageListWindow)
-		{
-			m_LanguageListWindow->OnImGuiRender(&m_ShowLanguageListWindow);
-		}
 
 		if (m_ShowDashboardWindow)
 		{
@@ -317,17 +201,21 @@ namespace TexWriter {
 	{
 		if (m_ContentActive)
 		{
-			m_ShowLanguageListWindow = true;
 			m_ShowDashboardWindow = false;
 			Application::Get().GetImGuiLayer()->ShowConsole();
+
+			m_ShowPreviewWindow = true;
+			m_ShowTextEditorWindow = true;
 
 			m_ShowAboutWindow = false;
 		}
 		else
 		{
-			m_ShowLanguageListWindow = false;
 			m_ShowDashboardWindow = false;
 			Application::Get().GetImGuiLayer()->ShowConsole();
+
+			m_ShowPreviewWindow = false;
+			m_ShowTextEditorWindow = false;
 
 			m_ShowAboutWindow = false;
 		}

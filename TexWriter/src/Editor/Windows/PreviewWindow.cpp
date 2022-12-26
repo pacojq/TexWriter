@@ -90,13 +90,7 @@ namespace TexWriter {
 			glDepthMask(GL_TRUE);
 
 		}
-
-		//proj->GetRenderPass()->GetSpecification().Target->SaveToFile();
-
 		proj->GetRenderPass()->Unbind();
-
-
-		proj->GetRenderPass()->GetSpecification().Target->SaveToFile();
 
 		delete[] vertices;
 	}

@@ -69,8 +69,15 @@ namespace TexWriter {
 	}
 
 
-	void OpenGLRenderTarget::SaveToFile()
+	void OpenGLRenderTarget::SaveToFile(const std::string filename)
 	{
+		std::string extension = filename.substr(filename.find_last_of(".") + 1);
+		if (extension != "png" && extension != "jpg")
+		{
+			TW_LOG_ERROR("Invalid image file type: '{0}'", extension);
+			return;
+		}
+
 		Bind();
 
 		unsigned char* pixels = (unsigned char*)malloc(m_Width * m_Height * 4);
@@ -79,7 +86,14 @@ namespace TexWriter {
 		glReadPixels(0, 0, m_Width, m_Height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
 		const uint16_t nChannels = 4;
-		stbi_write_png("result.png", m_Width, m_Height, nChannels, pixels, m_Width * nChannels);
+		if (extension == "png")
+		{
+			stbi_write_png(filename.c_str(), m_Width, m_Height, nChannels, pixels, m_Width * nChannels);
+		}
+		else 
+		{
+			stbi_write_jpg(filename.c_str(), m_Width, m_Height, nChannels, pixels, 100);
+		}
 
 		free(pixels);
 

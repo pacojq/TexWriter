@@ -16,7 +16,7 @@ namespace TexWriter {
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
-		virtual void SaveToFile() override;
+		virtual void SaveToFile(const std::string filename) override;
 
 		inline virtual uint32_t GetColorRendererID() const override { return m_ColorAttachment; }
 
