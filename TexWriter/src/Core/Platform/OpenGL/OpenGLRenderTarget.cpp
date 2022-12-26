@@ -6,6 +6,8 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include <stb_image_write.h>
+
 namespace TexWriter {
 
 
@@ -64,6 +66,24 @@ namespace TexWriter {
 	void OpenGLRenderTarget::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+
+	void OpenGLRenderTarget::SaveToFile()
+	{
+		Bind();
+
+		unsigned char* pixels = (unsigned char*)malloc(m_Width * m_Height * 4);
+
+		glReadBuffer(m_RendererID);
+		glReadPixels(0, 0, m_Width, m_Height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+		const uint16_t nChannels = 4;
+		stbi_write_png("result.png", m_Width, m_Height, nChannels, pixels, m_Width * nChannels);
+
+		free(pixels);
+
+		Unbind();
 	}
 
 }

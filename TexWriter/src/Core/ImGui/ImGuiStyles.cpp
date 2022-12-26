@@ -125,16 +125,6 @@ namespace TexWriter {
 		const std::string defFontItalic = defaultPath + "RobotoMono-Italic-VariableFont_wght.ttf";
 		s_StyleData.ItalicFont = LoadFont(cfg, fontSize, defFontItalic, io.Fonts->GetGlyphRangesDefault());
 
-		const std::string fontJapanese = "assets/fonts/Japanese/Kosugi/Kosugi-Regular.ttf";
-		s_LanguageFonts.FontJapanese = LoadFont(cfg, fontSize * .8f, fontJapanese, io.Fonts->GetGlyphRangesJapanese());
-
-		const std::string fontKorean = "assets/fonts/Korean/NanumGothic/NanumGothic-Regular.ttf";
-		s_LanguageFonts.FontKorean = LoadFont(cfg, fontSize, fontKorean, io.Fonts->GetGlyphRangesKorean());
-
-		const std::string fontChinese = "assets/fonts/Chinese_Simplified/DengXian/Deng.ttf";
-		s_LanguageFonts.FontChineseSimplified = LoadFont(cfg, fontSize, fontChinese, io.Fonts->GetGlyphRangesChineseFull());
-		//s_LanguageFonts.FontChineseSimplified = LoadFont(cfg, fontSize, fontChinese, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
-
 
 		io.Fonts->Build();
 
