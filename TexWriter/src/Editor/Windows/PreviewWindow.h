@@ -6,8 +6,6 @@
 
 namespace TexWriter {
 
-	#define IMGUI_PREVIEW_WINDOW_NAME "Preview"
-
 	class EditorLayer;
 
 	class PreviewWindow

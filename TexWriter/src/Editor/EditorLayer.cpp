@@ -1,11 +1,12 @@
 #include "twpch.h"
 #include "EditorLayer.h"
 
+#include "EditorNames.h"
+
 #include "Files/ContentSerializer.h"
 #include "Files/FilesUtil.h"
 
 #include "Core/Input/Input.h"
-
 #include "Core/ImGui/ImGuiUtil.h"
 
 #include "imgui_internal.h"
@@ -20,6 +21,7 @@ namespace TexWriter {
 		m_DashboardWindow = CreateRef<DashboardWindow>(this);
 		m_PreviewWindow = CreateRef<PreviewWindow>(this);
 		m_TextEditorWindow = CreateRef<TextEditorWindow>(this);
+		m_ShaderUniformsWindow = CreateRef<ShaderUniformsWindow>(this);
 	}
 
 	EditorLayer::~EditorLayer()
@@ -109,15 +111,17 @@ namespace TexWriter {
 		{
 			m_DashboardWindow->OnImGuiRender(&m_ShowDashboardWindow);
 		}
-		
 		if (m_ShowPreviewWindow)
 		{
 			m_PreviewWindow->OnImGuiRender(&m_ShowPreviewWindow);
 		}
-
 		if (m_ShowTextEditorWindow)
 		{
 			m_TextEditorWindow->OnImGuiRender(&m_ShowTextEditorWindow);
+		}
+		if (m_ShowShaderUniformsWindow)
+		{
+			m_ShaderUniformsWindow->OnImGuiRender(&m_ShowShaderUniformsWindow);
 		}
 
 		
@@ -206,6 +210,7 @@ namespace TexWriter {
 
 			m_ShowPreviewWindow = true;
 			m_ShowTextEditorWindow = true;
+			m_ShowShaderUniformsWindow = true;
 
 			m_ShowAboutWindow = false;
 		}
@@ -216,6 +221,7 @@ namespace TexWriter {
 
 			m_ShowPreviewWindow = false;
 			m_ShowTextEditorWindow = false;
+			m_ShowShaderUniformsWindow = false;
 
 			m_ShowAboutWindow = false;
 		}
@@ -230,28 +236,21 @@ namespace TexWriter {
 		ImGui::DockBuilderAddNode(m_DockspaceId, ImGuiDockNodeFlags_DockSpace); // Add empty node
 		ImGui::DockBuilderSetNodeSize(m_DockspaceId, viewport->Size);
 
-		ImGuiID dock_main_id = m_DockspaceId; // This variable will track the document node, however we are not using it here as we aren't docking anything into it.
+		ImGuiID dock_main_id = m_DockspaceId;
 
 		ImGuiID dock_left = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.20f, NULL, &dock_main_id);
-		ImGuiID dock_right = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.20f, NULL, &dock_main_id);
+		ImGuiID dock_right = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.40f, NULL, &dock_main_id);
 		ImGuiID dock_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.20f, NULL, &dock_main_id);
+		//ImGuiID dock_top = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Up, 0.20f, NULL, &dock_main_id);
 
 		ImGui::DockBuilderDockWindow("Console", dock_bottom);
 		ImGui::DockBuilderDockWindow(IMGUI_DASHBOARD_NAME, dock_main_id);
 
-		ImGui::DockBuilderDockWindow(IMGUI_TEXT_EDITOR_WINDOW_NAME, dock_main_id);
-		ImGui::DockBuilderDockWindow(IMGUI_PREVIEW_WINDOW_NAME, dock_right);
+		ImGui::DockBuilderDockWindow(EditorNames::Windows::TEXT_EDITOR, dock_main_id);
+		ImGui::DockBuilderDockWindow(EditorNames::Windows::SHADER_UNIFORMS, dock_left);
+		ImGui::DockBuilderDockWindow(EditorNames::Windows::PREVIEW, dock_right);
 
-		/*
-		for (int i = 0; i < LanguageIso::Unknown; i++)
-		{
-			std::string lang = Language::GetName((LanguageIso)i);
-			ImGui::DockBuilderDockWindow(lang.c_str(), dock_main_id);
-		}
-		*/
 
-		//ImGui::DockBuilderDockWindow("Mesh", dock_left);
-		//ImGui::DockBuilderDockWindow("Extra", dock_left);
 		ImGui::DockBuilderFinish(m_DockspaceId);
 	}
 

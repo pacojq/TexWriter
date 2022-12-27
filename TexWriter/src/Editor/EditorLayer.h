@@ -15,6 +15,7 @@
 #include "Windows/DashboardWindow.h"
 #include "Windows/PreviewWindow.h"
 #include "Windows/TextEditorWindow.h"
+#include "Windows/ShaderUniformsWindow.h"
 
 #include "imgui.h"
 
@@ -48,6 +49,7 @@ namespace TexWriter {
 	public:
 		inline const Ref<PreviewWindow> GetWindowPreview() const { return m_PreviewWindow; }
 		inline const Ref<TextEditorWindow> GetWindowTextEditor() const { return m_TextEditorWindow; }
+		inline const Ref<ShaderUniformsWindow> GetWindowShaderUniforms() const { return m_ShaderUniformsWindow; }
 
 
 	private:
@@ -65,6 +67,9 @@ namespace TexWriter {
 
 		Ref<TextEditorWindow> m_TextEditorWindow;
 		bool m_ShowTextEditorWindow = true;
+
+		Ref<ShaderUniformsWindow> m_ShaderUniformsWindow;
+		bool m_ShowShaderUniformsWindow = true;
 
 
 		//std::unordered_map<LanguageIso, Ref<LanguageWindow>> m_LanguageWindows;

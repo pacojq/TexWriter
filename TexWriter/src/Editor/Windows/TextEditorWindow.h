@@ -5,8 +5,6 @@
 
 namespace TexWriter {
 
-#define IMGUI_TEXT_EDITOR_WINDOW_NAME "Text Editor"
-
 	class EditorLayer;
 
 	class TextEditorWindow

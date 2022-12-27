@@ -8,6 +8,7 @@
 #include "Core/Input/KeyCodes.h"
 
 #include "Editor/EditorLayer.h"
+#include "Editor/EditorNames.h"
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -37,7 +38,7 @@ namespace TexWriter {
 
 	void PreviewWindow::OnImGuiRender(bool* show)
 	{
-		ImGui::Begin(IMGUI_PREVIEW_WINDOW_NAME, show);
+		ImGui::Begin(EditorNames::Windows::PREVIEW, show);
 		{
 			Ref<RenderTarget>& rt = m_Editor->GetContent()->GetRenderPass()->GetSpecification().Target;
 
@@ -78,7 +79,8 @@ namespace TexWriter {
 			m_QuadVertexBuffer->SetData(vertices, sizeof(QuadVertex) * 4);
 			m_QuadIndexBuffer->Bind();
 
-			// TODO: bind textures here
+			// BIND UNIFORMS
+			m_Editor->GetWindowShaderUniforms()->BindUniforms(shader);
 
 			// DRAW INDEXED
 			glDisable(GL_DEPTH_TEST);
