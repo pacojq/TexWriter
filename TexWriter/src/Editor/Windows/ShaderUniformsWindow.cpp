@@ -21,8 +21,8 @@ namespace TexWriter {
 
 	ShaderUniformsWindow::ShaderUniformsWindow(EditorLayer* editor) : m_Editor(editor)
 	{
-		
 	}
+
 
 	void ShaderUniformsWindow::BindUniforms(const Ref<Shader>& shader) const
 	{
@@ -37,6 +37,7 @@ namespace TexWriter {
 			binding->Bind(shader);
 		}
 	}
+
 
 
 
@@ -100,6 +101,7 @@ namespace TexWriter {
 				if (ImGui::MenuItem("Texture")) AddBinding<ShaderUniformTextureBinding>("u_NewTexture");
 				if (ImGui::MenuItem("Vector")) AddBinding<ShaderUniformVectorBinding>("u_NewVec4");
 				//if (ImGui::MenuItem("Int")) AddBinding<ShaderUniformTextureBinding>("u_NewInt");
+				if (ImGui::MenuItem("Color")) AddBinding<ShaderUniformColorBinding>("u_NewColor");
 
 				ImGui::EndPopup();
 			}
@@ -107,6 +109,52 @@ namespace TexWriter {
 		ImGui::End();
 	}
 
+
+
+
+
+	void ShaderUniformsWindow::DrawBindingName(ShaderUniformBinding* binding)
+	{
+		char buffer[256];
+		std::string id = fmt::format("##{0}", binding->GetName());
+
+		if (binding->IsEditingName())
+		{
+			strcpy(buffer, binding->GetEditorTempName().c_str());
+
+			if (ImGui::InputText(id.c_str(), buffer, 256))
+			{
+				binding->SetEditorTempName(buffer);
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Apply")) // TODO: just "pencil icon"
+			{
+				binding->SetName(binding->GetEditorTempName());
+				binding->SetEditingName(false);
+			}
+		}
+		else 
+		{
+			strcpy(buffer, binding->GetName().c_str());
+			ImGui::BeginDisabled();
+			ImGui::InputText(id.c_str(), buffer, 256, ImGuiInputTextFlags_ReadOnly);
+			ImGui::EndDisabled();
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Rename")) // TODO: just "pencil icon"
+			{
+				binding->SetEditingName(true);
+			}
+		}
+		/*
+		ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
+		ImGui::InputText("##text1", txt_green, sizeof(txt_green));
+		ImGui::PopStyleColor();
+		*/
+	}
 
 
 
@@ -136,8 +184,29 @@ namespace TexWriter {
 		}
 	}
 
+
 	void ShaderUniformsWindow::DrawBinding(ShaderUniformVectorBinding* binding)
 	{
-		ImGui::Text(binding->GetName().c_str());
+		DrawBindingName(binding);
+
+		glm::vec4 value = binding->GetValue();
+
+		std::string id = fmt::format("##vec4_{0}", binding->GetName());
+		ImGui::DragFloat4(id.c_str(), (float*)&value);
+
+		binding->SetValue(value);
+	}
+
+
+	void ShaderUniformsWindow::DrawBinding(ShaderUniformColorBinding* binding)
+	{
+		DrawBindingName(binding);
+
+		glm::vec4 color = binding->GetValue();
+
+		std::string id = fmt::format("##color_{0}", binding->GetName());
+		ImGui::ColorEdit4(id.c_str(), (float*)&color);
+
+		binding->SetValue(color);
 	}
 }

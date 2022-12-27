@@ -7,7 +7,8 @@
 namespace TexWriter {
 
 	ShaderUniformBinding::ShaderUniformBinding(const std::string name, UniformType type) 
-		: m_Name(name), m_Type(type)
+		: m_Name(name), m_Type(type),
+		  m_TempName(name), m_IsEditingName(false)
 	{
 	}
 
@@ -33,6 +34,16 @@ namespace TexWriter {
 		shader->SetFloat4(m_Name, m_Value);
 	}
 	void ShaderUniformVectorBinding::Accept(ShaderUniformsWindow* uniformsWindow)
+	{
+		uniformsWindow->DrawBinding(this);
+	}
+
+
+	void ShaderUniformColorBinding::Bind(const Ref<Shader>& shader) const
+	{
+		shader->SetFloat4(m_Name, m_Value);
+	}
+	void ShaderUniformColorBinding::Accept(ShaderUniformsWindow* uniformsWindow)
 	{
 		uniformsWindow->DrawBinding(this);
 	}

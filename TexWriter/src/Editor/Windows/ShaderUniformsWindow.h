@@ -9,6 +9,7 @@ namespace TexWriter {
 
 	class EditorLayer;
 
+
 	class ShaderUniformsWindow
 	{
 	public:
@@ -26,6 +27,10 @@ namespace TexWriter {
 	public:
 		void DrawBinding(ShaderUniformTextureBinding* binding);
 		void DrawBinding(ShaderUniformVectorBinding* binding);
+		void DrawBinding(ShaderUniformColorBinding* binding);
+
+	private:
+		void DrawBindingName(ShaderUniformBinding* binding);
 
 
 	private:
