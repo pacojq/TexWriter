@@ -23,6 +23,8 @@ namespace TexWriter {
 		template<class T>
 		inline void AddBinding(const std::string name) { m_Bindings.push_back(CreateRef<T>(name)); }
 
+		bool UniformExists(const std::string name) const;
+
 
 	public:
 		void DrawBinding(ShaderUniformTextureBinding* binding);

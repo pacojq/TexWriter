@@ -62,6 +62,8 @@ namespace TexWriter {
 
 	void TWriterProject::CompileShader(const EditorLayer* editor)
 	{
+		editor->GetWindowTextEditor()->ClearFeedback();
+
 		const std::string srcVertex = R""(
 		#version 330 core
 
@@ -89,7 +91,7 @@ namespace TexWriter {
 		}
 		else
 		{
-
+			editor->GetWindowTextEditor()->SetFeedback(res);
 		}
 		//m_RenderPass->GetSpecification().Shader->Compile(shaderSources);
 

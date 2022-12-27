@@ -40,7 +40,7 @@ The features that TexWriter provides, ordered by implementation priority, list a
 - [x] Export image asset
 - [x] Include input image files
 - [x] Define custom uniform variables
-- [ ] Editor feedback on shader compile errors
+- [x] Editor feedback on shader compile errors
 - [ ] Save and load TexWriter projects
 - [ ] Include OpenGL files
 

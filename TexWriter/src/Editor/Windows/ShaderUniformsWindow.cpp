@@ -39,6 +39,17 @@ namespace TexWriter {
 	}
 
 
+	bool ShaderUniformsWindow::UniformExists(const std::string name) const
+	{
+		for (auto& binding : m_Bindings)
+		{
+			if (binding->GetName() == name)
+				return true;
+		}
+		return false;
+	}
+
+
 
 
 	void ShaderUniformsWindow::OnImGuiRender(bool* show)
